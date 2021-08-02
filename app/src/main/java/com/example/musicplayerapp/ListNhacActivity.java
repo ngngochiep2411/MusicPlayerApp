@@ -34,8 +34,7 @@ public class ListNhacActivity extends AppCompatActivity {
             public void onItemClick(BaiHat baiHat) {
                 Intent intent = new Intent(ListNhacActivity.this, DetailActivity.class);
                 Bundle bundle = new Bundle();
-
-                bundle.putSerializable("baihat", baiHat);
+                bundle.putSerializable("baiHat", baiHat);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

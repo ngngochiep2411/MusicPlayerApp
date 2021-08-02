@@ -1,5 +1,6 @@
 package com.example.musicplayerapp;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +23,7 @@ public class DetailActivity extends AppCompatActivity {
     private static final int ACTION_CLEAR =3;
     private static final int ACTION_START =4 ;
     TextView txvTenBaiHat,tvTimerun,tvtimeMax;
-    ImageView imgAnh,imgPlay,imgNext,imgPrevious;
+    ImageView imgAnh,imgPlay,imgNext,imgPrevious,imgFavorite,imgRePlay,imgPlayRandom;
     MediaPlayer mediaPlayer;
     BaiHat baiHat;
     SeekBar seekBar;
@@ -66,6 +68,9 @@ public class DetailActivity extends AppCompatActivity {
         tvtimeMax=findViewById(R.id.txtTimeNhacMax);
         imgNext=findViewById(R.id.imgNext);
         imgPrevious=findViewById(R.id.imgPrevious);
+        imgFavorite=findViewById(R.id.imgFavorite);
+        imgRePlay=findViewById(R.id.imgRePlay);
+        imgPlayRandom=findViewById(R.id.imgPlayRamdom);
 
     }
     private void upDateSeekBar() {
@@ -77,8 +82,6 @@ public class DetailActivity extends AppCompatActivity {
         if(gocQuay==360){
             gocQuay=0;
         }
-
-
         tvTimerun.setText(convertMinute(mediaPlayer.getCurrentPosition()));
         tvtimeMax.setText(convertMinute(timeMax));
         imgAnh.setRotation(gocQuay);
@@ -108,6 +111,7 @@ public class DetailActivity extends AppCompatActivity {
 //                }
                 if(daCoNhac==false){
                     startMusic(baiHat.getLinkMp3());
+                    sendObjectToService();
                 }else {
                     if(isPlaying==true){
                        pauseMusic();
@@ -141,7 +145,7 @@ public class DetailActivity extends AppCompatActivity {
                     mediaPlayer.seekTo(thoiGianNhacDung);
                     mediaPlayer.start();
                 }
-
+                rePlayMusic();
 
             }
         });
@@ -157,6 +161,27 @@ public class DetailActivity extends AppCompatActivity {
                 chuyenBaiHat(-1);
             }
         });
+
+        imgFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgFavorite.setColorFilter(R.color.color_favorite);
+                Toast.makeText(getApplicationContext(),"Đã thêm vào danh sách yêu thích",Toast.LENGTH_SHORT).show();
+            }
+        });
+        imgPlayRandom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Bật phát ngẫu nhiên",Toast.LENGTH_SHORT).show();
+            }
+        });
+        imgRePlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rePlayMusic();
+                Toast.makeText(getApplicationContext(),"Phát lại bài hát hiện tại",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -166,10 +191,19 @@ public class DetailActivity extends AppCompatActivity {
         if (bundle == null) {
             return;
         }
-        baiHat = (BaiHat) bundle.get("baihat");
+        baiHat = (BaiHat) bundle.get("baiHat");
         txvTenBaiHat.setText(baiHat.getTenBaiHat());
         imgAnh.setImageResource(baiHat.getAvtBaiHat());
         indexBaiNhac=baiHat.getIndex();
+    }
+
+    public void sendObjectToService(){
+        Intent intent = new Intent(DetailActivity.this, MyService.class);
+       // Bundle bundle = new Bundle();
+        //bundle.putSerializable("send_to_service", baiHat);
+        intent.putExtra("123","zxcvbnmfgf");
+        //intent.putExtras(bundle);
+        startService(intent);
     }
     private void startMusic(int fileMp3){
         if(mediaPlayer==null){
@@ -199,8 +233,8 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
     private void pauseMusic(){
         isPlaying=false;
         mediaPlayer.pause();
@@ -237,5 +271,16 @@ public class DetailActivity extends AppCompatActivity {
         startMusic(baiHat.getLinkMp3());
     }
 
+    private void rePlayMusic(){
+        if(daCoNhac==false && isPlaying==false){
+            startMusic(baiHat.getLinkMp3());
+        }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.stop();
+    }
 }

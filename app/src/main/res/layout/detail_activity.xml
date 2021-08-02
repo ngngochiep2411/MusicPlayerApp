@@ -21,6 +21,14 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:gravity="center"/>
+    <ImageView
+        android:id="@+id/imgFavorite"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <RelativeLayout
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
@@ -103,7 +111,14 @@
                 android:gravity="center"
                 android:padding="5dp">
 
-
+                <ImageView
+                    android:layout_marginRight="16dp"
+                    android:id="@+id/imgRePlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_img"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_re_play" />
 
                 <ImageView
                     android:id="@+id/imgPrevious"
@@ -129,9 +144,19 @@
                     android:background="@drawable/bg_img"
                     android:layout_marginLeft="16dp"/>
 
+                <ImageView
+                    android:layout_marginLeft="16dp"
+                    android:id="@+id/imgPlayRamdom"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_img"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_phat_ngau_nhien" />
+
 
             </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>
